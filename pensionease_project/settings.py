@@ -60,14 +60,23 @@ WSGI_APPLICATION = 'pensionease_project.wsgi.application'
 # ---------------------------------------------------------------------------
 # Database
 #
-# Uses MySQL via PyMySQL (pure-Python driver, no system build deps needed).
-# Falls back to SQLite automatically if USE_SQLITE=True, which is handy for
-# quick local prototyping before a MySQL server is available.
+# Three modes, checked in this order:
+#   1. DATABASE_URL env var set (e.g. by Render's free Postgres add-on)
+#      -> uses that database automatically. This is what powers free-tier
+#         deployment on Render.
+#   2. USE_SQLITE=True -> local SQLite file, handy for quick prototyping.
+#   3. Otherwise -> explicit MySQL connection (for a VPS or other host where
+#      you're running your own MySQL server), via PyMySQL.
 # ---------------------------------------------------------------------------
-import pymysql
-pymysql.install_as_MySQLdb()
+import dj_database_url
 
-if config('USE_SQLITE', default=False, cast=bool):
+DATABASE_URL = config('DATABASE_URL', default='')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+    }
+elif config('USE_SQLITE', default=False, cast=bool):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -75,6 +84,8 @@ if config('USE_SQLITE', default=False, cast=bool):
         }
     }
 else:
+    import pymysql
+    pymysql.install_as_MySQLdb()
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
