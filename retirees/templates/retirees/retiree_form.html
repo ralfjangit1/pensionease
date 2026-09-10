@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{% if object %}Edit{% else %}Add{% endif %} Retiree — PensionEase{% endblock %}
+{% block page_title %}{% if object %}Edit Retiree{% else %}Add Retiree{% endif %}{% endblock %}
+{% block content %}
+<div class="panel">
+  <div class="panel-body">
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <p class="section-label">Personal Information</p>
+      <div class="form-grid">
+        <div class="field full">{{ form.employee_id.label_tag }}{{ form.employee_id }}{{ form.employee_id.errors }}</div>
+        <div class="field">{{ form.last_name.label_tag }}{{ form.last_name }}{{ form.last_name.errors }}</div>
+        <div class="field">{{ form.first_name.label_tag }}{{ form.first_name }}{{ form.first_name.errors }}</div>
+        <div class="field">{{ form.middle_name.label_tag }}{{ form.middle_name }}{{ form.middle_name.errors }}</div>
+        <div class="field">{{ form.date_of_birth.label_tag }}{{ form.date_of_birth }}{{ form.date_of_birth.errors }}</div>
+        <div class="field">{{ form.sex.label_tag }}{{ form.sex }}{{ form.sex.errors }}</div>
+        <div class="field full">{{ form.address.label_tag }}{{ form.address }}{{ form.address.errors }}</div>
+        <div class="field">{{ form.contact_number.label_tag }}{{ form.contact_number }}{{ form.contact_number.errors }}</div>
+        <div class="field">{{ form.email.label_tag }}{{ form.email }}{{ form.email.errors }}</div>
+      </div>
+
+      <p class="section-label" style="margin-top:30px;">Employment Details</p>
+      <div class="form-grid">
+        <div class="field">{{ form.position.label_tag }}{{ form.position }}{{ form.position.errors }}</div>
+        <div class="field">{{ form.department.label_tag }}{{ form.department }}{{ form.department.errors }}</div>
+        <div class="field">{{ form.date_hired.label_tag }}{{ form.date_hired }}{{ form.date_hired.errors }}</div>
+        <div class="field">{{ form.date_retired.label_tag }}{{ form.date_retired }}{{ form.date_retired.errors }}</div>
+        <div class="field">{{ form.monthly_salary.label_tag }}{{ form.monthly_salary }}{{ form.monthly_salary.errors }}</div>
+        <div class="field">{{ form.status.label_tag }}{{ form.status }}{{ form.status.errors }}</div>
+      </div>
+
+      <p class="section-label" style="margin-top:30px;">Beneficiary Information</p>
+      <div class="form-grid">
+        <div class="field">{{ form.beneficiary_name.label_tag }}{{ form.beneficiary_name }}{{ form.beneficiary_name.errors }}</div>
+        <div class="field">{{ form.beneficiary_relationship.label_tag }}{{ form.beneficiary_relationship }}{{ form.beneficiary_relationship.errors }}</div>
+        <div class="field full">{{ form.notes.label_tag }}{{ form.notes }}{{ form.notes.errors }}</div>
+      </div>
+
+      {% if form.non_field_errors %}
+        <ul class="field .errorlist" style="color:#9A3E3E;margin-top:16px;">{{ form.non_field_errors }}</ul>
+      {% endif %}
+
+      <div class="form-actions">
+        <a href="{% url 'retiree_list' %}" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn">Save Retiree Record</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

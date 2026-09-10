@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ retiree.full_name }} — PensionEase{% endblock %}
+{% block page_title %}{{ retiree.full_name }}{% endblock %}
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <h2>Record Summary</h2>
+    <div style="display:flex;gap:10px;">
+      <a href="{% url 'compute_pension' retiree.pk %}" class="btn btn-outline">Compute Pension</a>
+      <a href="{% url 'retiree_edit' retiree.pk %}" class="btn">Edit</a>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="form-grid">
+      <div class="field"><label>Employee ID</label><div>{{ retiree.employee_id }}</div></div>
+      <div class="field"><label>Status</label><div><span class="status-pill status-{{ retiree.status }}">{{ retiree.get_status_display }}</span></div></div>
+      <div class="field"><label>Position</label><div>{{ retiree.position }}</div></div>
+      <div class="field"><label>Department</label><div>{{ retiree.department|default:"—" }}</div></div>
+      <div class="field"><label>Date Hired</label><div>{{ retiree.date_hired|date:"F d, Y" }}</div></div>
+      <div class="field"><label>Date Retired</label><div>{{ retiree.date_retired|date:"F d, Y" }}</div></div>
+      <div class="field"><label>Years of Service</label><div>{{ retiree.years_of_service }} years</div></div>
+      <div class="field"><label>Monthly Salary</label><div>PHP {{ retiree.monthly_salary }}</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h2>Recent Computations</h2></div>
+  <div class="panel-body" style="padding:0;">
+    <table>
+      <thead><tr><th>Date</th><th>Years</th><th>Rate</th><th>Base</th><th>Adjustments</th><th>Net Pension</th></tr></thead>
+      <tbody>
+        {% for c in computations %}
+        <tr>
+          <td>{{ c.computed_at|date:"M d, Y" }}</td>
+          <td>{{ c.years_of_service }}</td>
+          <td>{{ c.rate_per_year }}</td>
+          <td>PHP {{ c.base_pension }}</td>
+          <td>PHP {{ c.adjustments }}</td>
+          <td>PHP {{ c.net_monthly_pension }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" style="color:var(--ink-soft);">No computations yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head">
+    <h2>Documents Issued</h2>
+    <a href="{% url 'generate_document' retiree.pk %}?type=award" class="btn btn-gold">Generate Certificate</a>
+  </div>
+  <div class="panel-body" style="padding:0;">
+    <table>
+      <thead><tr><th>Type</th><th>Certificate No.</th><th>Issued</th></tr></thead>
+      <tbody>
+        {% for d in documents %}
+        <tr><td>{{ d.get_document_type_display }}</td><td>{{ d.certificate_no }}</td><td>{{ d.issued_at|date:"M d, Y" }}</td></tr>
+        {% empty %}
+        <tr><td colspan="3" style="color:var(--ink-soft);">No documents generated yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Compute Pension — PensionEase{% endblock %}
+{% block page_title %}Compute Pension — {{ retiree.full_name }}{% endblock %}
+{% block content %}
+<div class="panel">
+  <div class="panel-body">
+    <p style="color:var(--ink-soft);font-size:13.5px;">
+      Base formula: <strong>monthly salary × years of service × accrual rate</strong>, plus any manual adjustments.
+      This retiree has {{ retiree.years_of_service }} years of service at a monthly salary of PHP {{ retiree.monthly_salary }}.
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-grid">
+        <div class="field">{{ form.rate_per_year.label_tag }}{{ form.rate_per_year }}{{ form.rate_per_year.errors }}</div>
+        <div class="field">{{ form.adjustments.label_tag }}{{ form.adjustments }}{{ form.adjustments.errors }}</div>
+        <div class="field full">{{ form.remarks.label_tag }}{{ form.remarks }}{{ form.remarks.errors }}</div>
+      </div>
+      <div class="form-actions">
+        <a href="{% url 'retiree_detail' retiree.pk %}" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn btn-gold">Compute Pension</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

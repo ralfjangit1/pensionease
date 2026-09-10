@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Reports — PensionEase{% endblock %}
+{% block page_title %}Reports{% endblock %}
+{% block content %}
+<div class="report-grid">
+  <div class="report-card">
+    <div class="icon">R</div>
+    <h3>Retiree Master List</h3>
+    <p>Full roster of all registered retirees with employment and status details.</p>
+    <div class="actions">
+      <a href="{% url 'report_master_list' %}" class="btn btn-gold" target="_blank">Generate PDF</a>
+    </div>
+  </div>
+  <div class="report-card">
+    <div class="icon">S</div>
+    <h3>Status Overview</h3>
+    <p>Counts of active, pending, and under-review applications.</p>
+    <div class="actions">
+      <a href="{% url 'report_status_overview' %}" class="btn btn-outline">View</a>
+    </div>
+  </div>
+  <div class="report-card">
+    <div class="icon">C</div>
+    <h3>Computation Summary</h3>
+    <p>Breakdown of pension computations per retiree — view from each retiree's detail page.</p>
+    <div class="actions">
+      <a href="{% url 'retiree_list' %}" class="btn btn-outline">Browse Retirees</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

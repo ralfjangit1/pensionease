@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Documents — PensionEase{% endblock %}
+{% block page_title %}Documents{% endblock %}
+{% block content %}
+<div class="doc-wrap">
+  <div class="doc-list panel">
+    <div class="panel-head"><h2>Select a Retiree</h2></div>
+    <div class="panel-body" style="padding:0;">
+      <table>
+        <thead><tr><th>Employee ID</th><th>Name</th><th>Generate</th></tr></thead>
+        <tbody>
+          {% for r in retirees %}
+          <tr>
+            <td>{{ r.employee_id }}</td>
+            <td>{{ r.full_name }}</td>
+            <td class="row-actions">
+              <a href="{% url 'generate_document' r.pk %}?type=award" target="_blank">Award</a>
+              <a href="{% url 'generate_document' r.pk %}?type=service" target="_blank">Service Record</a>
+              <a href="{% url 'generate_document' r.pk %}?type=computation" target="_blank">Computation Slip</a>
+              <a href="{% url 'generate_document' r.pk %}?type=clearance" target="_blank">Clearance</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" style="color:var(--ink-soft);">No retirees yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="doc-side panel">
+    <div class="panel-head"><h2>About Document Generation</h2></div>
+    <div class="panel-body">
+      <p style="color:var(--ink-soft);font-size:13.5px;line-height:1.6;">
+        Clicking a document type generates a PDF certificate for that retiree using their current
+        record and latest pension computation (if any), opens it in a new tab for printing, and
+        logs it under that retiree's Documents Issued history.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Retirees — PensionEase{% endblock %}
+{% block page_title %}Retirees{% endblock %}
+{% block content %}
+<div class="panel">
+  <div class="panel-head">
+    <form class="search-bar" method="get">
+      <input type="text" name="q" placeholder="Search by name or ID…" value="{{ request.GET.q }}">
+      <button type="submit" class="btn btn-outline">Search</button>
+    </form>
+    <a href="{% url 'retiree_add' %}" class="btn btn-gold">+ Add Retiree</a>
+  </div>
+  <div class="panel-body" style="padding:0;">
+    <table>
+      <thead>
+        <tr><th>Employee ID</th><th>Full Name</th><th>Position</th><th>Date Retired</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for r in retirees %}
+        <tr>
+          <td>{{ r.employee_id }}</td>
+          <td>{{ r.full_name }}</td>
+          <td>{{ r.position }}</td>
+          <td>{{ r.date_retired|date:"M d, Y" }}</td>
+          <td><span class="status-pill status-{{ r.status }}">{{ r.get_status_display }}</span></td>
+          <td class="row-actions">
+            <a href="{% url 'retiree_detail' r.pk %}">View</a>
+            <a href="{% url 'retiree_edit' r.pk %}">Edit</a>
+            <a href="{% url 'retiree_delete' r.pk %}">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" style="color:var(--ink-soft);">No retirees found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if is_paginated %}
+<div style="display:flex;gap:10px;">
+  {% if page_obj.has_previous %}<a class="btn btn-outline" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Previous</a>{% endif %}
+  {% if page_obj.has_next %}<a class="btn btn-outline" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

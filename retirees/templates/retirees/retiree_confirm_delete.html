@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Delete Retiree — PensionEase{% endblock %}
+{% block page_title %}Delete Retiree{% endblock %}
+{% block content %}
+<div class="panel">
+  <div class="panel-body">
+    <p>Are you sure you want to delete the record for <strong>{{ object.full_name }}</strong> ({{ object.employee_id }})? This will also remove associated computations and documents. This action cannot be undone.</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-actions" style="justify-content:flex-start;border-top:none;">
+        <button type="submit" class="btn btn-danger">Yes, Delete Record</button>
+        <a href="{% url 'retiree_detail' object.pk %}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
